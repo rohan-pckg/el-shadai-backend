@@ -2,11 +2,12 @@ const mongoose = require("mongoose");
 
 const appointmentSchema = new mongoose.Schema(
   {
-    doctor: {
+    doctorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Doctor", // Referencing the Doctor model
       required: true,
     },
+    doctorName: String,  // Add doctorName here
     date: {
       type: Date, // Changed to Date type for proper handling of dates
       required: true,

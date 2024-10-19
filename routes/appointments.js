@@ -4,10 +4,11 @@ const Appointment = require("../models/appointment");
 
 // POST: Create a new appointment
 router.post("/appointments", async (req, res) => {
-  const { doctorName, date, time, contact } = req.body;
+  const { doctorId, doctorName , date, time, contact } = req.body; // use 'doctor' instead of 'doctorName'
   try {
     const newAppointment = new Appointment({
-      doctorName,
+      doctorId,
+      doctorName, // use doctor ID instead of doctorName
       date,
       time,
       contact,
