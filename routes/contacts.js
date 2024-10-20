@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Contact = require("../models/contact"); // Assuming the contact model is in the 'models' folder
+const Contact = require("../models/contact"); 
+// Assuming the contact model is in the 'models' folder
 
 // POST: Create a new contact
 router.post("/contacts", async (req, res) => {
