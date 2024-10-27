@@ -21,6 +21,8 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // Allow credentials like cookies to be sent
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow these methods
+    preflightContinue: false, // Pass the CORS preflight response to the next handler
   }),
 );
 
@@ -28,7 +30,13 @@ app.use(morgan("combined")); // Logging
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })); // Rate limiting
 
 // CSRF Protection
-const csrfProtection = csrf({ cookie: true });
+const csrfProtection = csrf({
+  cookie: {
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+    secure: true, // Set to true if your site is served over HTTPS
+    sameSite: "None", // Allow cookies to be sent in cross-site requests
+  },
+});
 app.use(csrfProtection);
 
 // Import routes
