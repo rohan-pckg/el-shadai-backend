@@ -16,13 +16,15 @@ app.use(cookieParser());
 app.use(express.json());
 
 // CORS Configuration
-const allowedOrigins = [process.env.FRONTEND_URL];
+const allowedOrigins = [process.env.FRONTEND_URL]; // Make sure this is correctly set
+
 app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // Allow credentials like cookies to be sent
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow these methods
-    preflightContinue: false, // Pass the CORS preflight response to the next handler
+    preflightContinue: false,
+    optionsSuccessStatus: 200, // For legacy browser support
   }),
 );
 
