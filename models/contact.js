@@ -10,7 +10,7 @@ const contactSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-      match: [/^\d{10}$/, "Phone number must be 10 digits"], // add basic validation
+      match: [/^\d{9}$/, "Phone number must be 10 digits"], // add basic validation
     },
     email: {
       type: String,
