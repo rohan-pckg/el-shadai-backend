@@ -3,18 +3,24 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 const app = express();
 
-// CSRF Protection
-const csrfProtection = csrf({ cookie: true });
-
 // Middleware
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
-app.use(csrfProtection); // CSRF protection should come after cookie-parser
+app.use(morgan("combined")); // Logging
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })); // Rate limiting
+
+// CSRF Protection
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
 
 // Import routes
 const doctorsRoute = require("./routes/doctors");
@@ -38,29 +44,44 @@ app.get("/api/csrf-token", (req, res) => {
 });
 
 // MongoDB Connection
-const dbURL = process.env.DB_URL; // Use environment variable for MongoDB URI
+const dbURL = process.env.DB_URL;
 
-mongoose
-  .connect(dbURL) // Removed deprecated options
-  .then(() => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURL);
     console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error("MongoDB connection error:", err);
-  });
+    process.exit(1); // Exit process if connection fails
+  }
+};
 
-// Error handling for CSRF
+connectDB();
+
+// Error handling for CSRF and other errors
 app.use((err, req, res, next) => {
   if (err.code === "EBADCSRFTOKEN") {
     return res.status(403).json({ error: "Invalid CSRF token" });
   }
-  next(err);
+  console.error(err); // Log error for debugging
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
 // Server Start
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("Shutting down gracefully...");
+  await mongoose.connection.close();
+  server.close(() => {
+    console.log("Server closed");
+    process.exit(0);
+  });
 });
 
 // Welcome Message
