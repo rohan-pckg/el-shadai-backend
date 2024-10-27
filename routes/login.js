@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const csrfProtection = require('csurf')({ cookie: true });
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,7 +13,13 @@ const mockUser = {
   passwordHash: bcrypt.hashSync('password', 10), // Hash the password for testing
 };
 
-router.post('/login', async (req, res) => {
+// CSRF token route
+router.get('/csrf-token', csrfProtection, (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
+
+// Login route
+router.post('/login', csrfProtection, async (req, res) => {
   const { username, password } = req.body;
 
   // Check if the username matches and the password is correct
