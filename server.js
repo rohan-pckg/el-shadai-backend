@@ -14,7 +14,16 @@ const app = express();
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+
+// CORS Configuration
+const allowedOrigins = [process.env.FRONTEND_URL];
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // Allow credentials like cookies to be sent
+  }),
+);
+
 app.use(morgan("combined")); // Logging
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })); // Rate limiting
 
