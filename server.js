@@ -20,7 +20,7 @@ const allowedOrigins = [process.env.FRONTEND_URL]; // Make sure this is correctl
 
 app.use(
   cors({
-    origin: "https://www.elshadaiug.com/",
+    origin: "https://www.elshadaiug.com",
     credentials: true, // Allow credentials like cookies to be sent
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow these methods
     preflightContinue: false,
