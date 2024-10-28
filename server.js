@@ -35,8 +35,9 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })); // Rate limiting
 const csrfProtection = csrf({
   cookie: {
     httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    secure: true, // Set to true if your site is served over HTTPS
+    secure: process.env.NODE_ENV === "production", // Set to true if your site is served over HTTPS
     sameSite: "None", // Allow cookies to be sent in cross-site requests
+    path: "/",
   },
 });
 app.use(csrfProtection);
