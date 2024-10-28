@@ -1,7 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const csrfProtection = require("csurf")({ cookie: true });
+const csrfProtection = require("csurf")({
+  cookie: {
+    httpOnly: true,
+    secure: true, // Make sure this is true when deploying over HTTPS
+    sameSite: "None", // Allow cookies to be sent in cross-site requests
+  },
+});
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -38,10 +44,12 @@ router.post("/login", csrfProtection, async (req, res) => {
   });
 
   // Set the token as an HttpOnly cookie with proper attributes
-  res.setHeader(
-    "Set-Cookie",
-    `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=None; Secure`,
-  );
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true, // Ensure this is true in production
+    sameSite: "None", // Allow cross-site usage
+    maxAge: 3600 * 1000, // 1 hour in milliseconds
+  });
 
   return res.status(200).json({ message: "Login successful" });
 });
