@@ -48,7 +48,7 @@ router.post("/login", csrfProtection, async (req, res) => {
     httpOnly: true, // XSS protection
     secure: process.env.NODE_ENV === "production", // HTTPS for production
     sameSite: "None", // Needed for cross-origin requests
-    domain: "elshadaiug.com",
+    domain: ".elshadaiug.com",
     path: "/", // Adjust path as required
     maxAge: 24 * 60 * 60 * 1000, // Optional expiration
   });
