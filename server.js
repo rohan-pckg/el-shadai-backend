@@ -19,7 +19,7 @@ app.use(express.json());
 const allowedOrigins = [process.env.FRONTEND_URL];
 app.use(
   cors({
-    origin: "https://www.elshadaiug.com",
+    origin: allowedOrigins,
     credentials: true, // Allow credentials like cookies to be sent
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     optionsSuccessStatus: 200,
@@ -58,7 +58,8 @@ app.use("/api", newsletterRoute);
 app.use("/api/login", csrfProtection, loginRoute);
 
 // Route to Get CSRF Token
-app.get("/api/csrf-token", (req, res) => {
+app.get("/api/csrf-token", csrfProtection, (req, res) => {
+  console.log("CSRF token requested"); // Log request
   res.json({ csrfToken: req.csrfToken() });
 });
 
