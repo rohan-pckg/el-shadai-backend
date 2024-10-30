@@ -55,7 +55,7 @@ app.use("/api", ambookingRoute);
 app.use("/api", newsletterRoute);
 
 // Apply CSRF Protection to Sensitive Routes
-app.use("/api/login", csrfProtection, loginRoute);
+app.use("/api", csrfProtection, loginRoute);
 
 // Route to Get CSRF Token
 app.get("/api/csrf-token", csrfProtection, (req, res) => {
