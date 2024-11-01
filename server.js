@@ -19,7 +19,7 @@ app.use(express.json());
 const allowedOrigins = [process.env.FRONTEND_URL];
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "https://www.elshadaiug.com",
     credentials: true, // Allow credentials like cookies to be sent
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     optionsSuccessStatus: 200,
