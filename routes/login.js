@@ -44,10 +44,12 @@ router.post("/login", csrfProtection, async (req, res) => {
   });
 
   // Set the token as an HttpOnly cookie with proper attributes
-  res.cookie("__vercel_live_token", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
+  res.cookie("token", token, {
+    httpOnly: true, // XSS protection
+    secure: process.env.NODE_ENV === "production", // HTTPS for production
+    sameSite: "None", // Needed for cross-origin requests
+    path: "/", // Adjust path as required
+    maxAge: 24 * 60 * 60 * 1000, // Optional expiration
   });
 
   return res.status(200).json({ message: "Login successful" });
