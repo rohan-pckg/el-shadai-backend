@@ -21,8 +21,6 @@ app.use(
   cors({
     origin: 'https://www.elshadaiug.com',
     credentials: true, // Allow credentials like cookies to be sent
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    optionsSuccessStatus: 200,
   }),
 );
 
