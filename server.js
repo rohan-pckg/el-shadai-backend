@@ -101,6 +101,6 @@ process.on("SIGINT", async () => {
 
 // Welcome Route
 app.get("/", (req, res) => {
-    res.set('x-vercel-set-bypass-cookie', 'samesitenone');
+    
   res.send("Welcome to the Hospital API! Use /api/doctors to fetch doctors.");
 });

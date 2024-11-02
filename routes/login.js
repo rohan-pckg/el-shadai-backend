@@ -28,7 +28,7 @@ router.get("/csrf-token", csrfProtection, (req, res) => {
 
 // Login route
 router.post("/login", csrfProtection, async (req, res) => {
-  
+
   const { username, password } = req.body;
 
   // Check if the username matches and the password is correct
@@ -43,6 +43,7 @@ router.post("/login", csrfProtection, async (req, res) => {
   const token = jwt.sign({ userId: mockUser.id }, JWT_SECRET, {
     expiresIn: "1h",
   });
+  res.set('x-vercel-set-bypass-cookie', 'samesitenone');
 
   // Set the token as an HttpOnly cookie with proper attributes
   res.cookie('token', token, {
@@ -52,6 +53,7 @@ router.post("/login", csrfProtection, async (req, res) => {
 });
 
   return res.status(200).json({ message: "Login successful" });
+
 });
 
 module.exports = router;
