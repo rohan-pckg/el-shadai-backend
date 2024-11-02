@@ -28,6 +28,7 @@ router.get("/csrf-token", csrfProtection, (req, res) => {
 
 // Login route
 router.post("/login", csrfProtection, async (req, res) => {
+  
   const { username, password } = req.body;
 
   // Check if the username matches and the password is correct
